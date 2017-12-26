@@ -2,6 +2,7 @@ package com.example.ztz.bottomnavigationbar;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
@@ -35,12 +36,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private FindFragment findFragment;
     private ShopCartFragment shopCartFragment;
     private MineFragment mineFragment;
+    private Fragment mFragment;//当前显示的Fragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //底部导航栏
+        BottomNavigationBar();
+        //bottomNavigationBar的选中事件
+        bottomNavigationBar.setTabSelectedListener(this);
+        //fragment联动
+        initFragment();
+    }
+
+    private void initFragment() {
+        homeFragment = new HomeFragment();
+        classificationFragment = new ClassificationFragment();
+        findFragment = new FindFragment();
+        shopCartFragment = new ShopCartFragment();
+        mineFragment = new MineFragment();
+
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.frameLayout, homeFragment)
+                   .commit();
+        mFragment = homeFragment;
+    }
+
+    private void BottomNavigationBar() {
         //按钮右上角红点
         BadgeItem badgeItem = new BadgeItem();
         badgeItem.setHideOnSelect(false)
@@ -61,27 +85,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 .addItem(new BottomNavigationItem(R.drawable.mine,"我的"))
                 .setFirstSelectedPosition(0)//默认选中页面
                 .initialise();
-        //bottomNavigationBar的选中事件
-        bottomNavigationBar.setTabSelectedListener(this);
-        //默认选中的fragment
-        homeFragment = new HomeFragment();
-        classificationFragment = new ClassificationFragment();
-        findFragment = new FindFragment();
-        shopCartFragment = new ShopCartFragment();
-        mineFragment = new MineFragment();
-
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frameLayout, homeFragment)
-                   .add(R.id.frameLayout,classificationFragment)
-                   .add(R.id.frameLayout, findFragment)
-                   .add(R.id.frameLayout, shopCartFragment)
-                   .add(R.id.frameLayout, mineFragment)
-                   .show(homeFragment)
-                   .hide(classificationFragment)
-                   .hide(findFragment)
-                   .hide(shopCartFragment)
-                   .hide(mineFragment)
-                   .commit();
     }
 
     @Override
@@ -89,15 +92,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (position){
             case 0:
+                switchFragment(homeFragment);
                 fragmentTransaction.show(homeFragment)
                         .hide(classificationFragment)
                         .hide(findFragment)
                         .hide(shopCartFragment)
                         .hide(mineFragment)
                         .commit();
-
                 break;
             case 1:
+                switchFragment(classificationFragment);
                 fragmentTransaction.hide(homeFragment)
                         .show(classificationFragment)
                         .hide(findFragment)
@@ -106,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         .commit();
                 break;
             case 2:
+                switchFragment(findFragment);
                 fragmentTransaction.hide(homeFragment)
                         .hide(classificationFragment)
                         .show(findFragment)
@@ -114,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         .commit();
                 break;
             case 3:
+                switchFragment(shopCartFragment);
                 fragmentTransaction.hide(homeFragment)
                         .hide(classificationFragment)
                         .hide(findFragment)
@@ -122,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         .commit();
                 break;
             case 4:
+                switchFragment(mineFragment);
                 fragmentTransaction.hide(homeFragment)
                         .hide(classificationFragment)
                         .hide(findFragment)
@@ -129,25 +136,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         .show(mineFragment)
                         .commit();
                 break;
-            default:
-                fragmentTransaction.show(homeFragment)
-                        .hide(classificationFragment)
-                        .hide(findFragment)
-                        .hide(shopCartFragment)
-                        .hide(mineFragment)
-                        .commit();
-                break;
         }
-
     }
-
     @Override
-    public void onTabUnselected(int position) {
-
-    }
-
+    public void onTabUnselected(int position) {}
     @Override
-    public void onTabReselected(int position) {
+    public void onTabReselected(int position) {}
 
+    private void switchFragment(Fragment fragment) {
+        //判断当前显示的Fragment是不是切换的Fragment
+        if(mFragment != fragment) {
+            //判断切换的Fragment是否已经添加过
+            if (!fragment.isAdded()) {
+                //如果没有，则先把当前的Fragment隐藏，把切换的Fragment添加上
+                getSupportFragmentManager().beginTransaction().hide(mFragment)
+                        .add(R.id.frameLayout,fragment).commit();
+            } else {
+                //如果已经添加过，则先把当前的Fragment隐藏，把切换的Fragment显示出来
+                getSupportFragmentManager().beginTransaction().hide(mFragment).show(fragment).commit();
+            }
+            mFragment = fragment;
+        }
     }
 }
