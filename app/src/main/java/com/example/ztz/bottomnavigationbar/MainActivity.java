@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * BottomNavigationBar最新版本没有BadgeItem方法
+ * BottomNavigationBar最新版本(2.0.4)没有BadgeItem方法,不知道为什么
  *
  * BottomNavigationBar实现底部导航
  */
@@ -89,52 +89,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     @Override
     public void onTabSelected(int position) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (position){
             case 0:
                 switchFragment(homeFragment);
-                fragmentTransaction.show(homeFragment)
-                        .hide(classificationFragment)
-                        .hide(findFragment)
-                        .hide(shopCartFragment)
-                        .hide(mineFragment)
-                        .commit();
                 break;
             case 1:
                 switchFragment(classificationFragment);
-                fragmentTransaction.hide(homeFragment)
-                        .show(classificationFragment)
-                        .hide(findFragment)
-                        .hide(shopCartFragment)
-                        .hide(mineFragment)
-                        .commit();
                 break;
             case 2:
                 switchFragment(findFragment);
-                fragmentTransaction.hide(homeFragment)
-                        .hide(classificationFragment)
-                        .show(findFragment)
-                        .hide(shopCartFragment)
-                        .hide(mineFragment)
-                        .commit();
                 break;
             case 3:
                 switchFragment(shopCartFragment);
-                fragmentTransaction.hide(homeFragment)
-                        .hide(classificationFragment)
-                        .hide(findFragment)
-                        .show(shopCartFragment)
-                        .hide(mineFragment)
-                        .commit();
                 break;
             case 4:
                 switchFragment(mineFragment);
-                fragmentTransaction.hide(homeFragment)
-                        .hide(classificationFragment)
-                        .hide(findFragment)
-                        .hide(shopCartFragment)
-                        .show(mineFragment)
-                        .commit();
                 break;
         }
     }

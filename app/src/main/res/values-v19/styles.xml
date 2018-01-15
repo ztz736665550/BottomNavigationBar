@@ -8,8 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
-    <style name="TranslucentTheme" parent="AppTheme">
-        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+    <style name="TranslucentTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
 </resources>
