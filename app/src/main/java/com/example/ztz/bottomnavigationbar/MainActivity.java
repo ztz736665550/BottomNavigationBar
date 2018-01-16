@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.ashokvarma.bottomnavigation.BadgeItem;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         bottomNavigationBar.setTabSelectedListener(this);
         //fragment联动
         initFragment();
+        Log.i("----", "onCreate: new 1.0");
     }
 
     private void initFragment() {
