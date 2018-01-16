@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         bottomNavigationBar.setTabSelectedListener(this);
         //fragment联动
         initFragment();
-        Log.i("----", "onCreate: new 1.0");
     }
 
     private void initFragment() {
